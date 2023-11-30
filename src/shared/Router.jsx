@@ -3,10 +3,13 @@ import Home from "pages/Home";
 import Login from "pages/Login";
 import Profile from "pages/Profile";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export default function Router() {
-  const [isLogin, setIsLogin] = useState(true)
+  //const [isLogin, setIsLogin] = useState(false)
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  //console.log("jhee isLogin ", isLogin)
   return (
     <BrowserRouter>
       <Routes>
@@ -14,6 +17,7 @@ export default function Router() {
           <>
             <Route path="/" element={<Home />} />
             <Route path="/detail/:id" element={<Detail />} />
+            <Route path="*" element={<Navigate replace to="/" />} />
           </>
           :
           <>

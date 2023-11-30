@@ -10,6 +10,7 @@ const lettersSlice = createSlice({
     addLetter: (state, action) => {
       const newLetter = action.payload;
       return [newLetter, ...state];
+      //state.push(action.payload);
     },
     deleteLetter: (state, action) => {
       return state.filter((letter) => letter.id !== action.payload);
