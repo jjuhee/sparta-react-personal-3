@@ -45,6 +45,7 @@ function Login() {
           <input type="text" placeholder='아이디(4~10글자)' maxLength="10" minLength="4"
             value={id}
             onChange={(e) => setId(e.target.value)}
+            autoFocus
           />
           <input type="text" placeholder='비밀번호(4~15글자)' maxLength="15" minLength="4"
             value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -59,7 +60,8 @@ function Login() {
           <h1>회원가입</h1>
           <input type="text" placeholder='아이디(4~10글자)' maxLength="10" minLength="4"
             value={id}
-            onChange={(e) => setId(e.target.value)} />
+            onChange={(e) => setId(e.target.value)}
+            autoFocus />
           <input type="text" placeholder='비밀번호(4~15글자)' maxLength="15" minLength="4"
             value={password} onChange={(e) => setPassword(e.target.value)} />
           <input type="text" placeholder='닉네임(1~10글자)' maxLength="10" minLength="1"
@@ -108,6 +110,7 @@ const LoginForm = styled.form`
     cursor: pointer;
     font-size: 0.8rem;
     align-self: center;
+    border-bottom:1px solid black;
   }
 
 `
