@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { setLogin } from 'redux/modules/auth';
@@ -13,6 +13,11 @@ function Login() {
   const dispatch = useDispatch();
   //const isLogin = useSelector((state) => state.auth.isLogin);
   //const focusRef = useRef(null);
+  useEffect(() => {
+    const localUser = localStorage.getItem("user");
+    if (localUser)
+      dispatch(setLogin(JSON.parse(localUser)));
+  }, []);
 
   const handleSignIn = async (event) => {
     event.preventDefault();
@@ -25,8 +30,12 @@ function Login() {
 
       // 성공여부 처리, 유저정보 저장?
       if (data.success) {
-        dispatch(setLogin(true))
-        localStorage.setItem("accessToken", data.accessToken);
+        const UserString = JSON.stringify(data);
+        //localStorage.setItem("accessToken", data.accessToken);
+        localStorage.setItem("user", UserString);
+        localStorage.setItem("accessToken", data.accessToken)
+        dispatch(setLogin(data));
+
       } else {
         alert("로그인 실패!")
         setPassword("");
@@ -47,6 +56,7 @@ function Login() {
     };
     try {
       const { data } = await axios.post("https://moneyfulpublicpolicy.co.kr/register", request);
+
       if (data.success) {
         alert("회원가입 완료");
         setIsLoginPage(true);

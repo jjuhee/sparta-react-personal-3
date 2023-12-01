@@ -7,13 +7,13 @@ import { useSelector } from "react-redux";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 export default function Router() {
-  //const [isLogin, setIsLogin] = useState(false)
-  const isLogin = useSelector((state) => state.auth.isLogin);
-  //console.log("jhee isLogin ", isLogin)
+  const accessToken = useSelector((state) => state.auth.accessToken);
+  //const localAccessToken = localStorage.getItem("accessToken");
+
   return (
     <BrowserRouter>
       <Routes>
-        {isLogin ?
+        {accessToken !== "" ?
           <Route path="/" element={<Layout />}>
             <Route path="/" element={<Home />} />
             <Route path="/detail/:id" element={<Detail />} />

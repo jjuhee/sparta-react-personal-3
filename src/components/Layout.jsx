@@ -1,15 +1,22 @@
 import React from 'react'
-import { Outlet } from 'react-router-dom'
+import { useDispatch } from 'react-redux';
+import { Outlet, useNavigate } from 'react-router-dom'
+import { setLogout } from 'redux/modules/auth';
 import styled from 'styled-components'
 
 function Layout(props) {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+
+
   return (
     <>
       <Header>
-        <button>Home</button>
+        <button onClick={() => navigate("/")}>Home</button>
         헤더입니다
-        <button>내 프로필</button>
-        <button>로그아웃</button>
+        <button onClick={() => navigate("/profile")}>내 프로필</button>
+        <button onClick={() => { navigate("/login"); dispatch(setLogout()); }}>로그아웃</button>
       </Header>
       <Outlet />
     </>
