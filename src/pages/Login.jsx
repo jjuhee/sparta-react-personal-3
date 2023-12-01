@@ -2,33 +2,61 @@ import React from 'react'
 import { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { setLogin } from 'redux/modules/auth';
-import { useDispatch, useSelector } from 'react-redux';
-import { useRef } from 'react';
-import { current } from '@reduxjs/toolkit';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 function Login() {
   const [id, setId] = useState("");
   const [password, setPassword] = useState("");
+  const [nickname, setNickname] = useState("");
   const [isLoginPage, setIsLoginPage] = useState(true);
   const dispatch = useDispatch();
-  const isLogin = useSelector((state) => state.auth.isLogin);
+  //const isLogin = useSelector((state) => state.auth.isLogin);
   //const focusRef = useRef(null);
 
-  const handleSignIn = (event) => {
+  const handleSignIn = async (event) => {
     event.preventDefault();
-    // 아이디 비번 확인이 되었으면 로그인 처리
-    setId("");
-    setPassword("");
-    dispatch(setLogin(true));
+    const request = {
+      "id": id,
+      "password": password
+    };
+    try {
+      const { data } = await axios.post("https://moneyfulpublicpolicy.co.kr/login", request);
+
+      // 성공여부 처리, 유저정보 저장?
+      if (data.success) {
+        dispatch(setLogin(true))
+        localStorage.setItem("accessToken", data.accessToken);
+      } else {
+        alert("로그인 실패!")
+        setPassword("");
+      }
+    } catch (error) {
+      alert(`${error.response.data.message}`)
+    }
+
   }
 
-  const handleSignUp = (event) => {
+  const handleSignUp = async (event) => {
     event.preventDefault();
     // 아이디 비번 확인 되었으면 회원가입 처리 & 로그인 모드로 전환
-    setId("");
-    setPassword("");
-    alert("회원가입 완료");
-    setIsLoginPage(true);
+    const request = {
+      "id": id,
+      "password": password,
+      "nickname": nickname
+    };
+    try {
+      const { data } = await axios.post("https://moneyfulpublicpolicy.co.kr/register", request);
+      if (data.success) {
+        alert("회원가입 완료");
+        setIsLoginPage(true);
+      } else {
+        alert("회원가입 실패");
+      }
+    } catch (error) {
+      alert(`${error.response.data.message}`)
+    }
+
   }
 
   const handleButtonToggle = () => {
@@ -65,7 +93,7 @@ function Login() {
           <input type="text" placeholder='비밀번호(4~15글자)' maxLength="15" minLength="4"
             value={password} onChange={(e) => setPassword(e.target.value)} />
           <input type="text" placeholder='닉네임(1~10글자)' maxLength="10" minLength="1"
-            value={password} onChange={(e) => setPassword(e.target.value)} />
+            value={nickname} onChange={(e) => setNickname(e.target.value)} />
           <LoginButton type='submit' disabled={(id && password) ? false : true} >회원 가입</LoginButton>
 
           <p onClick={handleButtonToggle}> 로그인</p>
