@@ -6,6 +6,7 @@ export default function LetterList() {
   const activeMember = useSelector((state) => state.member);
   const letters = useSelector((state) => state.letters);
 
+
   const filteredLetters = letters.filter(
     (letter) => letter.writedTo === activeMember
   );

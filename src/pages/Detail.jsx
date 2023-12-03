@@ -6,6 +6,7 @@ import styled from "styled-components";
 import { getFormattedDate } from "util/date";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteLetter, editLetter } from "redux/modules/letters";
+import api from "../shared/api";
 
 export default function Detail() {
   const dispatch = useDispatch();
@@ -22,13 +23,13 @@ export default function Detail() {
   const onDeleteBtn = () => {
     const answer = window.confirm("정말로 삭제하시겠습니까?");
     if (!answer) return;
-
+    api.delete(`/letters/${id}`);
     dispatch(deleteLetter(id));
     navigate("/");
   };
   const onEditDone = () => {
     if (!editingText) return alert("수정사항이 없습니다.");
-
+    api.patch(`/letters/${id}`, { content: editingText })
     dispatch(editLetter({ id, editingText }));
     setIsEditing(false);
     setEditingText("");

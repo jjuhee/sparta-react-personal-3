@@ -26,7 +26,7 @@ function Login() {
       "password": password
     };
     try {
-      const { data } = await axios.post("https://moneyfulpublicpolicy.co.kr/login", request);
+      const { data } = await axios.post("https://moneyfulpublicpolicy.co.kr/login?expiresIn=1m", request);
 
       // 성공여부 처리, 유저정보 저장?
       if (data.success) {
