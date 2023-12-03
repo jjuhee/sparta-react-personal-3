@@ -11,12 +11,12 @@ import api from "../shared/api";
 export default function Detail() {
   const dispatch = useDispatch();
   const letters = useSelector((state) => state.letters);
-
+  const loginUserId = useSelector((state) => state.auth.userId);
   const [isEditing, setIsEditing] = useState(false);
   const [editingText, setEditingText] = useState("");
   const navigate = useNavigate();
   const { id } = useParams();
-  const { avatar, nickname, createdAt, writedTo, content } = letters.find(
+  const { avatar, nickname, createdAt, writedTo, content, userId } = letters.find(
     (letter) => letter.id === id
   );
 
@@ -66,10 +66,14 @@ export default function Detail() {
         ) : (
           <>
             <Content>{content}</Content>
-            <BtnsWrapper>
-              <Button text="수정" onClick={() => setIsEditing(true)} />
-              <Button text="삭제" onClick={onDeleteBtn} />
-            </BtnsWrapper>
+            {
+              (loginUserId === userId) ?
+                <BtnsWrapper>
+                  <Button text="수정" onClick={() => setIsEditing(true)} />
+                  <Button text="삭제" onClick={onDeleteBtn} />
+                </BtnsWrapper>
+                : <></>
+            }
           </>
         )}
       </DetailWrapper>
