@@ -7,7 +7,7 @@ import styled from 'styled-components'
 
 function Profile() {
   const user = useSelector((state) => state.auth);
-  //const userLocal = JSON.parse(localStorage.getItem('user'));
+  // const userLocal = JSON.parse(localStorage.getItem('user'));
   const accessToken = localStorage.getItem('accessToken');
   const [isEditing, setIsEditing] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
@@ -55,8 +55,11 @@ function Profile() {
       alert('변경된 내용이 없습니다.')
       return
     }
-    postData();
-    dispatch(setUserNickname(nickname));
+    if (imageSrc !== user.avatar)
+      postData();
+    if (nickname.trim() !== user.nickname)
+      dispatch(setUserNickname(nickname));
+
     setIsEditing(false);
   }
 
