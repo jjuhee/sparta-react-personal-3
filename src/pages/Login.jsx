@@ -26,7 +26,7 @@ function Login() {
       "password": password
     };
     try {
-      const { data } = await axios.post(`${process.env.REACT_APP_LOGIN_SERVER_URL}/login?expiresIn=1m`, request);
+      const { data } = await axios.post(`${process.env.REACT_APP_LOGIN_SERVER_URL}/login`, request);
 
       // 성공여부 처리, 유저정보 저장?
       if (data.success) {

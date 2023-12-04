@@ -11,25 +11,57 @@ function Profile() {
   const accessToken = localStorage.getItem('accessToken');
   const [isEditing, setIsEditing] = useState(false);
   const [nickname, setNickname] = useState(user.nickname);
-  const [imageSrc, setImageSrc] = useState(user.Avatar);
+  const [imageSrc, setImageSrc] = useState(user.avatar);
+  const [imageFile, setImageFile] = useState(null);
   const dispatch = useDispatch();
   const inputRef = useRef();
 
+  const postData = async () => {
+    // 이미지파일을 FormData에 담는 방법
+    const formData = new FormData();
+    // avatar와 nickname 중 하나 또느 모두 변경 가능
+    formData.append("avatar", imageFile);
+    formData.append("nickname", nickname);
+
+    try {
+      // 요청 시 Content-Type에 유의
+      const { data } = await axios.patch(`${process.env.REACT_APP_LOGIN_SERVER_URL}/profile`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+      if (data.success) {
+        console.log("업로드 성공", data);
+        dispatch(setUserAvatar(data.avatar));
+      }
+
+    } catch (error) {
+      alert(`${error.response.data.message}`)
+      console.log(error);
+
+      if (error.request.statusText === "Unauthorized") {
+        localStorage.clear();
+        window.location.replace('/login');
+      }
+    }
+
+
+  }
 
 
   const onComplete = () => {
-    if (nickname.trim() === user.nickname && imageSrc === user.Avatar) {
+    if (nickname.trim() === user.nickname && imageSrc === user.avatar) {
       alert('변경된 내용이 없습니다.')
       return
     }
-    //postData();
+    postData();
     dispatch(setUserNickname(nickname));
-    dispatch(setUserAvatar(imageSrc));
     setIsEditing(false);
   }
 
   const onCancelEdit = () => {
-    setImageSrc(user.Avatar)
+    setImageSrc(user.avatar)
     setNickname(user.nickname)
     setIsEditing(false)
   }
@@ -58,10 +90,8 @@ function Profile() {
       //setImageSrc(user.Avatar)
       return;
     }
+    setImageFile(e.target.files[0]);
     encodeFileToBase64(e.target.files[0]);
-    //dispatch(setUserAvatar(e.target.files[0].name))
-    //console.log(e.target.files[0].name);
-
   }
 
   const onImageClicked = () => {
