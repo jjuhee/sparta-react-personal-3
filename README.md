@@ -8,3 +8,4 @@ branch : redux-thunk
 
 history
 - 23.12.04 13:14 json server 배포 완료
+- 23.12.04 16:45 프로필 페이지 예외처리 추가
