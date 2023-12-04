@@ -8,14 +8,12 @@ import api from "../shared/api";
 
 export default function AddForm() {
   const user = useSelector((state) => state.auth);
-  const localUser = localStorage.getItem('user');
+  //const localUser = localStorage.getItem('user');
   const dispatch = useDispatch();
 
   //const [nickname, setNickname] = useState("");
   const [content, setContent] = useState("");
   const [member, setMember] = useState("카리나");
-
-  console.log("addForm: user redux", user, "user local", localUser);
 
   /** 서버에 letter 하나 추가 */
   const postLetter = async (newLetter) => {

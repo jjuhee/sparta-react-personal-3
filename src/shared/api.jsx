@@ -4,7 +4,7 @@ import store from "redux/config/configStore";
 const BASE_URL = 'https://moneyfulpublicpolicy.co.kr';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000', //TODO: env로 바꿔야하는데 안됨.
+  baseURL: process.env.REACT_APP_SERVER_URL,
 });
 
 instance.interceptors.request.use(
@@ -25,10 +25,9 @@ instance.interceptors.request.use(
         return config;
     } catch (error) {
       if (error.request.statusText === "Unauthorized") {
-        alert("로그인 만료");
         localStorage.clear();
         window.location.replace('/login');
-
+        alert("로그인 만료");
       }
     }
   },
@@ -36,7 +35,7 @@ instance.interceptors.request.use(
   //오류 요청을 보내기 전 수행되는 함수
   function (error) {
     alert("인터셉터 요청 에러");
-    console.log('인터셉터 요청 오류!');
+    console.log('인터셉터 요청 오류!', error);
     return Promise.reject(error);
   },
 
@@ -50,7 +49,7 @@ instance.interceptors.response.use(
   },
   //오류 응답을 내보내기 전 수행되는 함수 
   function (error) {
-    alert('서버에서 data를 가져오지 못했습니다.');
+    console.log('서버에서 data를 가져오지 못했습니다.', error);
     return Promise.reject(error);
   },
 );
