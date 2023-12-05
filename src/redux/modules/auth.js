@@ -1,11 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const localUser = JSON.parse(localStorage.getItem("user"));
+
 const initialState = {
-  accessToken: "",
-  avatar: "",
-  nickname: "",
+  accessToken: localUser?.accessToken,
+  avatar: localUser?.avatar,
+  nickname: localUser?.nickname,
   success: false,
-  userId: "",
+  userId: localUser?.userId,
 };
 
 const authSlice = createSlice({
@@ -13,9 +15,8 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setLogin: (state, action) => {
-      //state.accessToken = action.payload.accessToken;
-      //state.user = action.payload.user;
       const userData = action.payload;
+      localStorage.setItem("user", JSON.stringify(userData));
       return userData;
     },
     setLogout: (state, action) => {
@@ -24,10 +25,13 @@ const authSlice = createSlice({
     },
     setUserNickname: (state, action) => {
       state.nickname = action.payload;
-      //json.. localstorage 저장?
+      localUser.nickname = action.payload;
+      localStorage.setItem("user", JSON.stringify(localUser));
     },
     setUserAvatar: (state, action) => {
       state.avatar = action.payload;
+      localUser.avatar = action.payload;
+      localStorage.setItem("user", JSON.stringify(localUser));
     },
   },
 });

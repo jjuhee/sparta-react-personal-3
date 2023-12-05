@@ -32,7 +32,7 @@ export default function AddForm() {
       content,
       avatar: user.avatar,
       writedTo: member,
-      createdAt: new Date(),
+      createdAt: new Date().toString(),
       userId: user.userId
     };
 
